@@ -7,7 +7,7 @@ from django.contrib.auth.password_validation import validate_password
 
 def UniqueEmailValidator(value):
     user = User.objects.filter(email__iexact=value.strip()).first()
-    if user is not None and user.is_active:
+    if user is not None:
         raise ValidationError('Пользователь с таким адресом электронной почты уже существует.')
 
 
