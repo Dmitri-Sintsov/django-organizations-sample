@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'organizations',
     'org_sample',
+    'org_group',
 ]
 
 MIDDLEWARE = [

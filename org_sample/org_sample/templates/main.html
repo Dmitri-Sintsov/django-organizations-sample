@@ -1,6 +1,7 @@
 {% if request.user.is_authenticated %}
     <div>You are logged as {{ user }}</div>
     <div><a href="{% url 'admin:index' %}">Django Admin</a></div>
+    <div><a href="{% url 'logout' %}">Logout</a></div>
 {% else %}
     <form action="{% url 'login' %}" method="post">
         {% csrf_token %}
@@ -8,5 +9,5 @@
         <input type="submit" value="Login">
     </form>
 
-    Have no account yet? Click here to <a href="{% url 'signup' %}">Signup</a>
+    Have no account yet? Click here to <a href="{% url 'signup' %}">signup</a>
 {% endif %}

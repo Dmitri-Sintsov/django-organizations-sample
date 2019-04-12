@@ -1,9 +1,12 @@
+from django.shortcuts import redirect
 from django.urls import reverse
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.views.generic import FormView
-from django.contrib.auth import views as auth_views
+from django.contrib.auth import logout, views as auth_views
 
-from organizations.utils import create_organization
+from organizations.models import OrganizationUser
+
+from org_group.models import GroupOrganization
 
 from .forms import SignupForm
 
@@ -20,8 +23,15 @@ class SignupView(FormView):
             **form.cleaned_data
         )
         user.save()
-        # We will assign organization admin manually in Django Admin.
-        org = create_organization(user, organization_name, org_user_defaults={'is_admin': False})
+        group, created = Group.objects.get_or_create(name='"{}" group'.format(organization_name))
+        group.user_set.add(user)
+        org, created = GroupOrganization.objects.get_or_create(
+            group=group,
+            defaults={'name': organization_name}
+        )
+        # We will assign organization admin / owner manually in Django Admin.
+        org.add_user(user, is_admin=False)
+        # org.change_owner(org_user)
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -34,3 +44,8 @@ class LoginView(auth_views.LoginView):
 
     def get_success_url(self):
         return reverse('login')
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
