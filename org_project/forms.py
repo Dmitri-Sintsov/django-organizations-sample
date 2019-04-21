@@ -8,7 +8,13 @@ from django.contrib.auth.password_validation import validate_password
 def UniqueEmailValidator(value):
     user = User.objects.filter(email__iexact=value.strip()).first()
     if user is not None:
-        raise ValidationError('Пользователь с таким адресом электронной почты уже существует.')
+        raise ValidationError('The user with such email address already exists.')
+
+
+def UniqueUsernameValidator(value):
+    user = User.objects.filter(username__iexact=value.strip()).first()
+    if user is not None:
+        raise ValidationError('The user with such username already exists.')
 
 
 class SignupForm(forms.Form):
@@ -27,11 +33,13 @@ class SignupForm(forms.Form):
     )
     email = forms.CharField(
         widget=forms.EmailInput(),
+        validators=[UniqueEmailValidator],
         label="Work email",
         required=True,
         max_length=75
     )
     username = UsernameField(
+        validators=[UniqueUsernameValidator],
         label="User name",
         required=True,
     )
@@ -46,10 +54,6 @@ class SignupForm(forms.Form):
         label="Confirm password",
         required=True
     )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['email'].validators.append(UniqueEmailValidator)
 
     def clean(self):
         super().clean()
