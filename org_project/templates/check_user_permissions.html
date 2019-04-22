@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
+    {% if codename_value %}
+        User {{ request.user }} has "{{ codename_value }}" permission.
+    {% endif %}
+
     <form action="{% url 'check_user_permissions' %}" method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Check current user permissions">
     </form>
-
-    {% if codename_value %}
-        User {{ request.user }} has "{{ codename_value }}" permission.
-    {% endif %}
 {% endblock content %}

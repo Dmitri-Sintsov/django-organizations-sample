@@ -1,18 +1,22 @@
+from django.db.models import Subquery
 from django.contrib.auth.backends import ModelBackend
-
-from organizations.models import Organization
 
 from .models import OrganizationPermission
 
 
 class OrganizationModelBackend(ModelBackend):
 
+    # Todo: add caching.
     def get_organization_permissions(self, user_obj, obj=None):
-        return []
+        user_organizations = user_obj.organizations_organization.all()
+        user_organizations_permissions = OrganizationPermission.objects.filter(
+            organization__in=Subquery(user_organizations.values('pk'))
+        )
+        return user_organizations_permissions.values_list('permission__codename', flat=True)
 
     def has_perm(self, user_obj, perm, obj=None):
-        model_has_perm = super().has_perm(user_obj, perm, obj)
-        if model_has_perm:
-            return perm in self.get_organization_permissions(user_obj, obj)
+        has_org_perm = perm in self.get_organization_permissions(user_obj, obj)
+        if has_org_perm:
+            return True
         else:
-            return False
+            return super().has_perm(user_obj, perm, obj)
