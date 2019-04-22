@@ -1,7 +1,8 @@
 from django.core.exceptions import ValidationError
+from django.utils.html import format_html
 from django import forms
 from django.contrib.auth.forms import UsernameField
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 from django.contrib.auth.password_validation import validate_password
 
 
@@ -64,3 +65,33 @@ class SignupForm(forms.Form):
         if password and password != confirm_password:
             self.add_error('password', 'Passwords does not match')
         return self.cleaned_data
+
+
+class PermissionForm(forms.ModelForm):
+
+    class Meta:
+        model = Permission
+        fields = ['codename']
+        widgets = {
+            'codename': forms.Select(choices=Permission.objects.values_list('pk', 'codename'))
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user = None
+
+    def set_user(self, user=None):
+        self.user = user
+
+    def get_codename_value(self):
+        return dict(self.fields['codename'].widget.choices).get(int(self.cleaned_data['codename']))
+
+    def clean(self):
+        super().clean()
+        codename = self.get_codename_value()
+        if self.user is None:
+            self.add_error('codename', 'Please specify user to check the permissions')
+        elif not self.user.has_perm(codename):
+            self.add_error('codename', format_html(
+                'User "{}" has no permission "{}"', self.user, codename
+            ))

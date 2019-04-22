@@ -107,6 +107,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = ['org_permissions.auth_backends.OrganizationModelBackend']
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
