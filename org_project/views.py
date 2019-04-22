@@ -1,4 +1,4 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.views.generic import FormView
@@ -7,6 +7,10 @@ from django.contrib.auth import logout, views as auth_views
 from org_permissions.models import OrganizationPermission
 
 from .forms import SignupForm
+
+
+def main(request):
+    return render(request, 'main.html')
 
 
 class SignupView(FormView):
@@ -30,7 +34,7 @@ class SignupView(FormView):
 
 class LoginView(auth_views.LoginView):
 
-    template_name = 'main.html'
+    template_name = 'login.html'
 
     def get_success_url(self):
         return reverse('login')

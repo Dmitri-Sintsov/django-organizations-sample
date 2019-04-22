@@ -1,13 +1,9 @@
-{% if request.user.is_authenticated %}
-    <div>You are logged as {{ user }}</div>
-    <div><a href="{% url 'admin:index' %}">Django Admin</a></div>
-    <div><a href="{% url 'logout' %}">Logout</a></div>
-{% else %}
-    <form action="{% url 'login' %}" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Login">
-    </form>
+{% extends "base.html" %}
 
-    Have no account yet? Click here to <a href="{% url 'signup' %}">signup</a>
-{% endif %}
+{% block content %}
+    {% if request.user.is_authenticated %}
+        <span>You are logged in as {{ user }}</span>
+    {% else %}
+        <a href="https://github.com/bennylope/django-organizations">django-organizations</a> sample project
+    {% endif %}
+{% endblock content %}

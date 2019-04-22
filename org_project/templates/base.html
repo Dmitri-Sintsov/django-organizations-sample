@@ -1,0 +1,16 @@
+{% extends "admin:admin/base.html" %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+    <span><a href="{% url 'main' %}">Home</a></span>
+    {% if request.user.is_authenticated %}
+        {% if request.user.is_staff %}
+            <span><a href="{% url 'admin:index' %}">Django Admin</a></span>
+        {% endif %}
+        <span><a href="{% url 'logout' %}">Logout</a></span>
+    {% else %}
+        <span><a href="{% url 'signup' %}">Signup</a></span>
+        <span><a href="{% url 'login' %}">Login</a></span>
+    {% endif %}
+    </div>
+{% endblock breadcrumbs %}

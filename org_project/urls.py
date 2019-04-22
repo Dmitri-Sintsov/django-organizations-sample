@@ -18,14 +18,15 @@ from django.urls import path, re_path, include
 
 from organizations.backends import invitation_backend
 
-from .views import LoginView, SignupView, logout_view
+from .views import main, LoginView, SignupView, logout_view
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     re_path(r'^accounts/', include('organizations.urls')),
     re_path(r'^invitations/', include(invitation_backend().get_urls())),
+    path('', main, name='main'),
     path('signup/', SignupView.as_view(), name='signup'),
-    path('', LoginView.as_view(), name='login'),
+    path('login/', LoginView.as_view(), name='login'),
     path('logout/', logout_view, name='logout'),
 ]

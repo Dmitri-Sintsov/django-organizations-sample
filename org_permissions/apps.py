@@ -1,5 +1,6 @@
 from django.apps import AppConfig
 
 
-class OrgGroupConfig(AppConfig):
-    name = 'org_group'
+class OrgPermissionsConfig(AppConfig):
+    name = 'org_permissions'
+    verbose_name = 'Organization permissions'
