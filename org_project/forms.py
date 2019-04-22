@@ -84,7 +84,12 @@ class PermissionForm(forms.ModelForm):
         self.user = user
 
     def get_codename_value(self):
-        return dict(self.fields['codename'].widget.choices).get(int(self.cleaned_data['codename']))
+        codename = self.cleaned_data['codename']
+        try:
+            codename = int(codename)
+        except ValueError:
+            pass
+        return dict(self.fields['codename'].widget.choices).get(codename)
 
     def clean(self):
         super().clean()
