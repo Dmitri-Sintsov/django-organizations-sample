@@ -1,6 +1,8 @@
 from django.core.exceptions import ValidationError
 from django.utils.html import format_html
 from django import forms
+from django.db.models import Value
+from django.db.models.functions import Concat
 from django.contrib.auth.forms import UsernameField
 from django.contrib.auth.models import User, Permission
 from django.contrib.auth.password_validation import validate_password
@@ -73,7 +75,9 @@ class PermissionForm(forms.ModelForm):
         model = Permission
         fields = ['codename']
         widgets = {
-            'codename': forms.Select(choices=Permission.objects.values_list('pk', 'codename'))
+            'codename': forms.Select(choices=Permission.objects.annotate(
+                perm=Concat('content_type__app_label', Value('.'), 'codename')
+            ).values_list('pk', 'perm'))
         }
 
     def __init__(self, *args, **kwargs):
