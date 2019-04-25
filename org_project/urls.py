@@ -18,7 +18,7 @@ from django.urls import path, re_path, include
 
 from organizations.backends import invitation_backend
 
-from .views import main, LoginView, SignupView, logout_view, CheckUserPermissionsView
+from .views import main, LoginView, SignupView, logout_view, user_permissions
 
 
 urlpatterns = [
@@ -29,5 +29,5 @@ urlpatterns = [
     path('signup/', SignupView.as_view(), name='signup'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', logout_view, name='logout'),
-    path('check-user-permissions/', CheckUserPermissionsView.as_view(), name='check_user_permissions'),
+    path('user-permissions/', user_permissions, name='user_permissions'),
 ]

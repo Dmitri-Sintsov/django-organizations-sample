@@ -7,7 +7,7 @@
         {% if request.user.is_staff %}
             <span><a href="{% url 'admin:index' %}">Django Admin</a></span>
         {% endif %}
-        <span><a href="{% url 'check_user_permissions' %}">Check user permissions</a></span>
+        <span><a href="{% url 'user_permissions' %}">User permissions</a></span>
         <span><a href="{% url 'logout' %}">Logout</a></span>
     {% else %}
         <span><a href="{% url 'signup' %}">Signup</a></span>

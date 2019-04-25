@@ -1,12 +1,16 @@
+from collections import OrderedDict
+
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 from django.views.generic import FormView
 from django.contrib.auth import logout, views as auth_views
+from django.db.models import Value
+from django.db.models.functions import Concat
 
 from org_permissions.models import OrganizationPermission
 
-from .forms import SignupForm, PermissionForm
+from .forms import SignupForm
 
 
 def main(request):
@@ -45,24 +49,26 @@ def logout_view(request):
     return redirect('main')
 
 
-class CheckUserPermissionsView(FormView):
+def get_admin_url(model, action='change'):
+    return reverse(
+        "admin:{0}_{1}_{2}".format(
+            model._meta.app_label,
+            model._meta.model_name,
+            action
+        ), args=(model.pk,)
+    )
 
-    form_class = PermissionForm
-    template_name = 'check_user_permissions.html'
 
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
-        form.set_user(self.request.user)
-        return form
-
-    def get_initial(self):
-        initial = super().get_initial()
-        if 'codename' in self.request.POST:
-            initial['codename'] = self.request.POST.get('codename')
-        return initial
-
-    def form_valid(self, form):
-        codename_value = form.get_codename_value()
-        return render(request=self.request, template_name=self.template_name, context={
-            'form': form, 'codename_value': codename_value
-        })
+def user_permissions(request):
+    context_data = {
+        'user_perms': OrderedDict([
+            (perm, request.user.has_perm(perm)) for perm in Permission.objects.annotate(
+                perm=Concat('content_type__app_label', Value('.'), 'codename')
+            ).values_list('perm', flat=True)
+        ]),
+        'url_change_user': get_admin_url(request.user),
+        'url_organization_user': reverse('admin:organizations_organizationuser_changelist'),
+        'url_group_permission': reverse('admin:auth_group_changelist'),
+        'url_organization_permission': reverse('admin:org_permissions_organizationpermission_changelist'),
+    }
+    return render(request, 'user_permissions.html', context_data)

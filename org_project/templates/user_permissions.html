@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <ul>
+        <li><a href="{{ url_change_user }}">Change user groups</a></li>
+        <li><a href="{{ url_organization_user }}">Change user organizations</a></li>
+        <li><a href="{{ url_group_permission }}">Change group permissions</a></li>
+        <li><a href="{{ url_organization_permission }}">Change organization permissions</a></li>
+    </ul>
+    <div>List of {{ request.user }} permissions:</div>
+    <table>
+        {% for perm, has_perm in user_perms.items %}
+            <tr>
+                {% if has_perm %}
+                    <th>{{ perm }}</th><th>Yes</th>
+                {% else %}
+                    <td>{{ perm }}</td><td>No</td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock content %}
