@@ -16,9 +16,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path, include
 
+from rest_framework import routers
+
 from organizations.backends import invitation_backend
 
+from org_permissions.views import OrganizationUserViewSet, OrganizationPermissionViewSet
+
 from .views import main, LoginView, SignupView, logout_view, user_permissions
+
+
+router = routers.DefaultRouter()
+router.register(r'organizationuser', OrganizationUserViewSet, 'organization_users')
+router.register(r'organizationpermission', OrganizationPermissionViewSet, 'organization_permissions')
 
 
 urlpatterns = [
@@ -26,8 +35,10 @@ urlpatterns = [
     re_path(r'^accounts/', include('organizations.urls')),
     re_path(r'^invitations/', include(invitation_backend().get_urls())),
     path('', main, name='main'),
+    path('api/', include(router.urls)),
     path('signup/', SignupView.as_view(), name='signup'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', logout_view, name='logout'),
     path('user-permissions/', user_permissions, name='user_permissions'),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]

@@ -4,6 +4,7 @@
     <div class="breadcrumbs">
     <span><a href="{% url 'main' %}">Home</a></span>
     {% if request.user.is_authenticated %}
+        <span>{{ request.user }}</span>
         {% if request.user.is_staff %}
             <span><a href="{% url 'admin:index' %}">Django Admin</a></span>
         {% endif %}
