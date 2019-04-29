@@ -19,7 +19,7 @@ class OrganizationModelBackend(ModelBackend):
             organization__in=Subquery(user_organizations.values('pk'))
         )
         perms = user_organizations_permissions.annotate(
-            perm=Concat('permission__content_type__app_label', Value('.'), 'permission__codename')
+            perm=Concat('permissions__content_type__app_label', Value('.'), 'permissions__codename')
         ).values_list('perm', flat=True)
         setattr(user_obj, self.perm_cache_name, set(perms))
         return perms

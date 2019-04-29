@@ -7,6 +7,7 @@ from .models import OrganizationPermission
 
 class OrganizationUserSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = OrganizationUser
         fields = ['id', 'organization', 'user']
@@ -15,7 +16,8 @@ class OrganizationUserSerializer(serializers.ModelSerializer):
 
 class OrganizationPermissionSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = OrganizationPermission
-        fields = ['id', 'organization', 'permission']
+        fields = ['id', 'organization', 'permissions']
         datatables_always_serialize = ['id']

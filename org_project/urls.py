@@ -22,7 +22,10 @@ from organizations.backends import invitation_backend
 
 from org_permissions.views import OrganizationUserViewSet, OrganizationPermissionViewSet
 
-from .views import main, LoginView, SignupView, logout_view, user_permissions
+from .views import (
+    main, LoginView, SignupView, logout_view, user_permissions,
+    add_user_to_admins, add_user_to_members, remove_user_from_admins, remove_user_from_members
+)
 
 
 router = routers.DefaultRouter()
@@ -40,5 +43,9 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', logout_view, name='logout'),
     path('user-permissions/', user_permissions, name='user_permissions'),
+    path('add-user-to-admins/', add_user_to_admins, name='add_user_to_admins'),
+    path('add-user-to-members/', add_user_to_members, name='add_user_to_members'),
+    path('remove-user-from-admins/', remove_user_from_admins, name='remove_user_from_admins'),
+    path('remove-user-from-members/', remove_user_from_members, name='remove_user_from_members'),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]

@@ -3,7 +3,14 @@
 {% block content %}
     {% if request.user.is_authenticated %}
         <span>You are logged in as {{ user }}</span>
+        <ul>
+            <li><a href="{% url 'add_user_to_members' %}">Add current user to members organization</a></li>
+            <li><a href="{% url 'add_user_to_admins' %}">Add current user to admins organization</a></li>
+            <li><a href="{% url 'remove_user_from_members' %}">Remove current user from members organization</a></li>
+            <li><a href="{% url 'remove_user_from_admins' %}">Remove current user from admins organization</a></li>
+            <li><a href="/api/" target="_blank">Check DRF API access rights</a></li>
+        </ul>
     {% else %}
-        <a href="https://github.com/bennylope/django-organizations">django-organizations</a> sample project
+        Permissions for <a href="https://github.com/bennylope/django-organizations">django-organizations</a>.
     {% endif %}
 {% endblock content %}
