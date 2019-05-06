@@ -10,6 +10,11 @@ from .serializers import OrganizationUserSerializer, OrganizationPermissionSeria
 
 class OrganizationUserViewSet(viewsets.ModelViewSet):
 
+    # Sample of perms_map override.
+    perms_map = {
+        'POST': 'organizations.view_organizationuser',
+    }
+
     permission_classes = [ModelPermissions]
     queryset = OrganizationUser.objects.all()
     serializer_class = OrganizationUserSerializer
