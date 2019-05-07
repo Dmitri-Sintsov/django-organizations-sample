@@ -4,7 +4,7 @@ django-organizations-sample
 
 Before running::
 
-    pip3 install -r requirements.txt
+    python3 -m pip install -r requirements.txt
     rm db.sqlite3
     python3 manage.py makemigrations org_permissions
     python3 manage.py migrate

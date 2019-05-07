@@ -60,22 +60,22 @@ def get_admin_url(model, action='change'):
 
 
 def add_user_to_members(request):
-    OrganizationPermission.objects.add_user('Organization Users', request.user, create_initial=True)
+    OrganizationPermission.objects.add_user('Organization Users', request.user)
     return redirect('user_permissions')
 
 
 def add_user_to_admins(request):
-    OrganizationPermission.objects.add_user('Organization Admins', request.user, create_initial=True)
+    OrganizationPermission.objects.add_user('Organization Admins', request.user)
     return redirect('user_permissions')
 
 
 def remove_user_from_members(request):
-    OrganizationPermission.objects.remove_user('Organization Users', request.user, create_initial=True)
+    OrganizationPermission.objects.remove_user('Organization Users', request.user)
     return redirect('user_permissions')
 
 
 def remove_user_from_admins(request):
-    OrganizationPermission.objects.remove_user('Organization Admins', request.user, create_initial=True)
+    OrganizationPermission.objects.remove_user('Organization Admins', request.user)
     return redirect('user_permissions')
 
 
