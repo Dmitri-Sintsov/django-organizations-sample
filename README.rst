@@ -1,6 +1,11 @@
+.. _django-organizations: https://github.com/bennylope/django-organizations
+.. _django-organizations-permissions: https://github.com/Dmitri-Sintsov/django-organizations-permissions
+
 ===========================
 django-organizations-sample
 ===========================
+
+Sample to use custom auth backend / DRF Permissions class from `django-organizations-permissions`_ with `django-organizations`_.
 
 Before running::
 
